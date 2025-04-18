@@ -109,7 +109,7 @@ Exemple de corps pour POST /orders
 ```
 curl -X POST http://localhost:8081/products \
   -H "Content-Type: application/json" \
-  -d '{"name":"Stylo","price":1.5}'
+  -d '{"name":"Nokia","price":699}'
 ```
 
 # 2) Lister tous les produits
