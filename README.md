@@ -105,21 +105,27 @@ Exemple de corps pour POST /orders
 🧪 Tests via curl
 
 # 1) Ajouter un produit
+```
 curl -X POST http://localhost:8081/products \
   -H "Content-Type: application/json" \
   -d '{"name":"Stylo","price":1.5}'
+```
 
 # 2) Lister tous les produits
+```
 curl http://localhost:8081/products
+```
 
 # 3) Créer une commande (IDs de produits)
+```
 curl -X POST http://localhost:8082/orders \
   -H "Content-Type: application/json" \
   -d '[1,2]'
-
+```
 # 4) Récupérer une commande
+```
 curl http://localhost:8082/orders/1
-
+```
 
 
 ⸻
