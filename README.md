@@ -13,46 +13,21 @@ Les deux services communiquent via HTTP (fetch natif), et sont packagés via Doc
 
 ```mermaid
 flowchart TB
-  subgraph Root [.]
-    direction LR
-    CS[catalogue-service]
-    OS[order-service]
-    GI[.gitignore]
-    DC[docker-compose.yml]
-  end
-
-  subgraph CS [catalogue-service]
-    direction TB
-    CS1[Dockerfile]
-    CS2[db.js]
-    CS3[index.js]
-    CS4[package.json]
-    CS5[products.js]
-  end
-
-  subgraph OS [order-service]
-    direction TB
-    OS1[Dockerfile]
-    OS2[db.js]
-    OS3[index.js]
-    OS4[package.json]
-    OS5[orders.js]
-  end
-
-  Root --> CS
-  Root --> OS
-  Root --> GI
-  Root --> DC
-  CS --> CS1
-  CS --> CS2
-  CS --> CS3
-  CS --> CS4
-  CS --> CS5
-  OS --> OS1
-  OS --> OS2
-  OS --> OS3
-  OS --> OS4
-  OS --> OS5
+    A["."] 
+    A --> B["catalogue-service"]
+    B --> B1["Dockerfile"]
+    B --> B2["db.js"]
+    B --> B3["index.js"]
+    B --> B4["package.json"]
+    B --> B5["products.js"]
+    A --> C["order-service"]
+    C --> C1["Dockerfile"]
+    C --> C2["db.js"]
+    C --> C3["index.js"]
+    C --> C4["package.json"]
+    C --> C5["orders.js"]
+    A --> D[".gitignore"]
+    A --> E["docker-compose.yml"]
 ```
 
 ---
