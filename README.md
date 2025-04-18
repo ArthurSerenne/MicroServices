@@ -153,6 +153,48 @@ curl http://localhost:8082/orders/1
 
 ⸻
 
+## 🧪 Tests Unitaires & Intégration (Jest)
+
+Des tests ont été mis en place à l'aide du framework [Jest](https://jestjs.io/) pour vérifier le bon fonctionnement de la logique métier des services.
+
+### Installation et Configuration
+
+1.  **Dépendance** : `jest` a été ajouté aux `devDependencies` de chaque microservice (`catalogue-service` et `order-service`) via `npm install --save-dev jest`.
+2.  **Script NPM** : Un script `test` a été ajouté dans les fichiers `package.json` respectifs pour lancer les tests avec la commande `npm test`.
+    ```json
+    "scripts": {
+      "start": "node index.js",
+      "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js"
+    }
+    ```
+    *Note : L'option `--experimental-vm-modules` est nécessaire car le projet utilise les modules ES6 (`"type": "module"`).*
+
+### Type de Tests
+
+Initialement, des tests unitaires utilisant des *mocks* (simulations) de la base de données étaient envisagés. Cependant, la configuration actuelle utilise des **tests d'intégration**. Cela signifie que les tests interagissent directement avec les **vraies bases de données SQLite** (`catalogue.db`, `order.db`) pour vérifier le comportement des fonctions dans des conditions plus proches de la réalité.
+
+### Structure des Tests
+
+-   Les fichiers de test sont nommés `*.test.js` (par exemple, `products.test.js`, `orders.test.js`) et sont situés à la racine de chaque service.
+-   Ils utilisent les fonctions `describe` et `it` de Jest pour structurer les scénarios de test.
+-   Des **hooks** Jest sont utilisés pour gérer l'état de la base de données :
+    -   `beforeAll` : Récupère la connexion à la base de données une seule fois avant tous les tests du fichier.
+    -   `beforeEach` : Vide les tables concernées avant chaque test pour garantir l'isolation.
+    -   `afterAll` : Vide les tables une dernière fois après tous les tests.
+
+### Modification des fichiers `db.js`
+
+Les fichiers `catalogue-service/db.js` et `order-service/db.js` ont été légèrement modifiés pour assurer la fiabilité des tests.
+
+-   **Problème initial** : La fonction `init()` (qui crée les tables) était appelée de manière asynchrone, mais la promesse de connexion (`open({...})`) était exportée immédiatement. Il était possible que les tests tentent d'accéder à une table avant que `init()` n'ait terminé sa création, provoquant une erreur (`SQLITE_ERROR: no such table`).
+-   **Solution** : La logique a été ajustée pour que la promesse exportée par défaut (`initializedDbPromise`) ne se résolve qu'**après** la fin de l'exécution de la fonction `init()`. Cela garantit que la base de données et ses tables sont prêtes avant que les tests ne commencent à interagir avec elles.
+
+---
+
+⸻
+
+
+
 🐳 Docker & docker‑compose
 
 Le fichier `docker-compose.yml` se trouve à la racine du projet et configure les services suivants :

@@ -1,13 +1,13 @@
 import sqlite3 from 'sqlite3';
 import { open } from 'sqlite';
 
-const dbPromise = open({
+const dbPromiseInternal = open({
   filename: './catalogue.db',
   driver: sqlite3.Database
 });
 
 async function init() {
-  const db = await dbPromise;
+  const db = await dbPromiseInternal;
   await db.run(`
     CREATE TABLE IF NOT EXISTS products (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -32,7 +32,9 @@ async function init() {
     }
     console.log('Seeded products table with mock data');
   }
+  return db;
 }
-init();
 
-export default dbPromise;
+const initializedDbPromise = init();
+
+export default initializedDbPromise;
