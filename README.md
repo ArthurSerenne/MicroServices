@@ -80,8 +80,9 @@ POST	/products	Crée un nouveau produit
 Exemple de corps pour POST /products
 
 {
-  "name": "Stylo",
-  "price": 1.50
+    "id": 1,
+    "name": "iPhone 15",
+    "price": 999
 }
 
 
