@@ -1,20 +1,21 @@
-let products = [
-  { id: 1, name: "iPhone 15", price: 999 },
-  { id: 2, name: "Samsung Galaxy S24", price: 899 },
-  { id: 3, name: "Google Pixel 8", price: 799 }
-];
-let nextId = 4;
+import dbPromise from './db.js';
 
-export function getAll() {
-  return products;
+export async function getAll() {
+  const db = await dbPromise;
+  return db.all('SELECT * FROM products');
 }
 
-export function getById(id) {
-  return products.find(p => p.id === id);
+export async function getById(id) {
+  const db = await dbPromise;
+  return db.get('SELECT * FROM products WHERE id = ?', id);
 }
 
-export function create(product) {
-  product.id = nextId++;
-  products.push(product);
-  return product;
+export async function create(product) {
+  const db = await dbPromise;
+  const result = await db.run(
+    'INSERT INTO products (name, price) VALUES (?, ?)',
+    product.name,
+    product.price
+  );
+  return { id: result.lastID, name: product.name, price: product.price };
 }

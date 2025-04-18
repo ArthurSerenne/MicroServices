@@ -3,6 +3,7 @@ services:
     build: ./catalogue-service
     ports:
       - "8081:8081"
+
   order:
     build: ./order-service
     ports:

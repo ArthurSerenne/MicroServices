@@ -1,12 +1,17 @@
-let orders = [];
-let nextId = 1;
+import dbPromise from './db.js';
 
-export function create(products) {
-  const order = { id: nextId++, products };
-  orders.push(order);
-  return order;
+export async function create(products) {
+  const db = await dbPromise;
+  const result = await db.run(
+    'INSERT INTO orders (products) VALUES (?)',
+    JSON.stringify(products)
+  );
+  return { id: result.lastID, products };
 }
 
-export function getById(id) {
-  return orders.find(o => o.id === id);
+export async function getById(id) {
+  const db = await dbPromise;
+  const row = await db.get('SELECT * FROM orders WHERE id = ?', id);
+  if (!row) return null;
+  return { id: row.id, products: JSON.parse(row.products) };
 }

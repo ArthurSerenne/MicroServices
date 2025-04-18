@@ -1,26 +1,27 @@
-import express from "express";
-import { getAll, getById, create } from "./products.js";
+import express from 'express';
+import { getAll, getById, create } from './products.js';
 
 const app = express();
 app.use(express.json());
 
-app.get("/products", (req, res) => {
-  res.json(getAll());
+app.get('/products', async (req, res) => {
+  const products = await getAll();
+  res.json(products);
 });
 
-app.get("/products/:id", (req, res) => {
+app.get('/products/:id', async (req, res) => {
   const id = parseInt(req.params.id, 10);
-  const product = getById(id);
-  if (!product) return res.status(404).json({ error: "Product not found" });
+  const product = await getById(id);
+  if (!product) return res.status(404).json({ error: 'Product not found' });
   res.json(product);
 });
 
-app.post("/products", (req, res) => {
+app.post('/products', async (req, res) => {
   const { name, price } = req.body;
   if (!name || price == null) {
-    return res.status(400).json({ error: "name and price are required" });
+    return res.status(400).json({ error: 'name and price are required' });
   }
-  const newProduct = create({ name, price });
+  const newProduct = await create({ name, price });
   res.status(201).json(newProduct);
 });
 

@@ -14,11 +14,13 @@ Les deux services communiquent via HTTP (fetch natif), et sont packagés via Doc
 .
 ├── catalogue-service
 │   ├── Dockerfile
+│   ├── db.js
 │   ├── index.js
 │   ├── package.json
 │   └── products.js
 ├── order-service
 │   ├── Dockerfile
+│   ├── db.js
 │   ├── index.js
 │   ├── package.json
 │   └── orders.js
