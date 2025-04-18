@@ -42,34 +42,51 @@ flowchart TB
 
 ## 🛠 Installation & exécution locale
 
-1. **Cloner le dépôt**  
-   ```bash
-   git clone <repo-url>
-   cd <repo-root>
+1.  **Cloner le dépôt**
+    ```bash
+    git clone <repo-url>
+    ```
+    ```bash
+    cd <repo-root>
+    ```
 
-	2.	Installer les dépendances
+2.  **Installer les dépendances**
 
-cd catalogue-service && npm install
-cd ../order-service   && npm install
+    Ouvrez deux terminaux distincts dans le répertoire racine du projet (`<repo-root>`).
 
+    *   Dans le **premier terminal** :
+        ```bash
+        cd catalogue-service
+        ```
+        ```bash
+        npm install
+        ```
+    *   Dans le **second terminal** :
+        ```bash
+        cd order-service
+        ```
+        ```bash
+        npm install
+        ```
 
-	3.	Lancer les services
-	•	En mode développement (2 terminaux) :
+3.  **Lancer les services**
+    *   **En mode développement** (utilisez les deux terminaux ouverts précédemment) :
 
-# Terminal 1
-cd catalogue-service
-npm start
+        *   Dans le **premier terminal** (pour `catalogue-service`) :
+            ```bash
+            npm start
+            ```
+        *   Dans le **second terminal** (pour `order-service`) :
+            ```bash
+            npm start
+            ```
 
-# Terminal 2
-cd order-service
-npm start
+    *   **Avec Docker Compose** (depuis la racine du projet `<repo-root>`) :
+        ```bash
+        docker-compose up --build
+        ```
 
-
-	•	Avec Docker Compose :
-
-docker-compose up --build
-
-
+---
 
 ⸻
 
@@ -138,10 +155,19 @@ curl http://localhost:8082/orders/1
 
 🐳 Docker & docker‑compose
 
-Le docker-compose.yml se trouve à la racine et lance :
-	•	catalogue → service sur localhost:8081
-	•	order    → service sur localhost:8082, configuré pour joindre le catalogue via http://catalogue:8081
+Le fichier `docker-compose.yml` se trouve à la racine du projet et configure les services suivants :
 
+*   **catalogue** :
+    *   Construit à partir du dossier `./catalogue-service`.
+    *   Exposé sur `localhost:8081`.
+*   **order** :
+    *   Construit à partir du dossier `./order-service`.
+    *   Exposé sur `localhost:8082`.
+    *   Configuré pour communiquer avec le service `catalogue` via l'URL `http://catalogue:8081` (grâce à la variable d'environnement `CATALOGUE_URL`).
+
+Voici le contenu du fichier `docker-compose.yml` :
+
+```yaml
 version: "3.8"
 services:
   catalogue:
@@ -155,32 +181,4 @@ services:
       - "8082:8082"
     environment:
       - CATALOGUE_URL=http://catalogue:8081
-
-
-
-⸻
-
-✅ .gitignore
-
-Le .gitignore couvre :
-
-# Node.js modules
-**/node_modules/
-
-# Logs
-*.log
-logs/
-
-# Environnements
-.env
-.env.*.local
-
-# Coverage & builds
-coverage/
-dist/
-build/
-
-# IDE & OS
-.DS_Store
-.vscode/
-.idea/
+```
