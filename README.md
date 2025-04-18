@@ -182,15 +182,6 @@ Initialement, des tests unitaires utilisant des *mocks* (simulations) de la base
     -   `beforeEach` : Vide les tables concernées avant chaque test pour garantir l'isolation.
     -   `afterAll` : Vide les tables une dernière fois après tous les tests.
 
-### Modification des fichiers `db.js`
-
-Les fichiers `catalogue-service/db.js` et `order-service/db.js` ont été légèrement modifiés pour assurer la fiabilité des tests.
-
--   **Problème initial** : La fonction `init()` (qui crée les tables) était appelée de manière asynchrone, mais la promesse de connexion (`open({...})`) était exportée immédiatement. Il était possible que les tests tentent d'accéder à une table avant que `init()` n'ait terminé sa création, provoquant une erreur (`SQLITE_ERROR: no such table`).
--   **Solution** : La logique a été ajustée pour que la promesse exportée par défaut (`initializedDbPromise`) ne se résolve qu'**après** la fin de l'exécution de la fonction `init()`. Cela garantit que la base de données et ses tables sont prêtes avant que les tests ne commencent à interagir avec elles.
-
----
-
 ⸻
 
 
